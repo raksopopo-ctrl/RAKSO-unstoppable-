@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAKSO — Game Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     SUNSET / SKY THEME — Inspired by the uploaded photo
+     Soft coral pinks, muted blue-grays, warm gradients
+  ============================================================ */
+  :root {
+    /* Sky & Atmosphere */
+    --sky-deep: #0f172a;
+    --sky-dark: #1e293b;
+    --sky-mid: #334155;
+    --sky-light: #475569;
+    --cloud: #94a3b8;
+    --cloud-soft: #cbd5e1;
+
+    /* Sunset Accents — pulled from the photo's coral/pink horizon */
+    --sunset-coral: #fb7185;
+    --sunset-rose: #f43f5e;
+    --sunset-peach: #fda4af;
+    --sunset-warm: #fdba74;
+    --sunset-gold: #fbbf24;
+
+    /* Soft Sky Blue — from the upper clouds */
+    --sky-blue: #7dd3fc;
+    --sky-blue-soft: #38bdf8;
+
+    /* Surface Colors */
+    --bg-primary: #0f172a;
+    --bg-secondary: rgba(30, 41, 59, 0.7);
+    --bg-glass: rgba(30, 41, 59, 0.45);
+    --bg-card: rgba(30, 41, 59, 0.6);
+    --bg-card-hover: rgba(51, 65, 85, 0.7);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(251, 113, 133, 0.35);
+
+    /* Text */
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    /* Radius */
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 40%, #312e81 100%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Subtle animated sky gradient overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 120%, rgba(251, 113, 133, 0.15), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 20% 0%, rgba(125, 211, 252, 0.08), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== HEADER ===== */
+  .portal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(24px) saturate(1.2);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    gap: 20px;
+  }
+
+  .logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--sunset-coral), var(--sunset-rose));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(251, 113, 133, 0.3);
+  }
+
+  .logo-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, var(--sunset-peach), var(--sunset-coral), var(--sky-blue));
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: skyShine 6s ease-in-out infinite;
+  }
+
+  @keyframes skyShine {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .search-bar {
+    flex: 1;
+    max-width: 480px;
+    position: relative;
+  }
+
+  .search-bar input {
+    width: 100%;
+    padding: 10px 16px 10px 42px;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .search-bar input::placeholder { color: var(--text-muted); }
+  .search-bar input:focus {
+    border-color: var(--sunset-coral);
+    box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.1);
+    background: rgba(30, 41, 59, 0.8);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 15px;
+    pointer-events: none;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .nav-pill {
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .nav-pill:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+  .nav-pill.active {
+    color: var(--sunset-coral);
+    border-color: rgba(251, 113, 133, 0.3);
+    background: rgba(251, 113, 133, 0.08);
+  }
+
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sunset-warm), var(--sunset-coral));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+    color: #fff;
+  }
+  .user-avatar:hover { border-color: var(--sky-blue); }
+
+  /* ===== HERO ===== */
+  .hero-section {
+    position: relative;
+    padding: 32px;
+    margin: 24px 28px 0;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    min-height: 300px;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: 1px solid var(--border);
+  }
+
+  .hero-section:hover { transform: scale(1.005); }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #1e1b4b 0%, #312e81 30%, #4c1d95 60%, #be185d 100%);
+    z-index: 0;
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15,23,42,0.3) 0%, transparent 40%, rgba(251,113,133,0.15) 100%);
+  }
+
+  .hero-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(251, 113, 133, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(125, 211, 252, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 1;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.3;
+    z-index: 1;
+    transition: transform 0.1s linear;
+  }
+
+  .hero-glow-1 { top: -150px; right: -80px; background: var(--sunset-coral); }
+  .hero-glow-2 { bottom: -150px; left: 5%; background: var(--sky-blue-soft); opacity: 0.2; }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 500px;
+    padding: 8px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    background: rgba(251, 113, 133, 0.15);
+    border: 1px solid rgba(251, 113, 133, 0.25);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sunset-peach);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    backdrop-filter: blur(10px);
+  }
+
+  .hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 10px;
+    color: #fff;
+    text-shadow: 0 2px 20px rgba(251, 113, 133, 0.25);
+  }
+
+  .hero-desc {
+    color: var(--cloud);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    max-width: 420px;
+  }
+
+  .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, var(--sunset-coral), var(--sunset-rose));
+    border: none;
+    border-radius: 100px;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 24px rgba(251, 113, 133, 0.35);
+  }
+
+  .hero-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(251, 113, 133, 0.45);
+  }
+
+  .hero-preview {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 280px;
+    height: 200px;
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+
+  .hero-preview::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(251,113,133,0.08), rgba(125,211,252,0.06));
+  }
+
+  .hero-preview-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+
+  /* ===== CATEGORIES ===== */
+  .categories-bar {
+    display: flex;
+    gap: 10px;
+    padding: 20px 28px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .categories-bar::-webkit-scrollbar { display: none; }
+
+  .cat-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: var(--bg-glass);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    backdrop-filter: blur(10px);
+  }
+
+  .cat-chip:hover {
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+    background: var(--bg-card-hover);
+  }
+
+  .cat-chip.active {
+    background: linear-gradient(135deg, rgba(251, 113, 133, 0.15), rgba(125, 211, 252, 0.1));
+    border: 1px solid var(--sunset-coral);
+    color: var(--sunset-coral);
+  }
+
+  .cat-icon { font-size: 15px; }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    padding: 16px 28px 28px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary);
+  }
+
+  .section-title .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sunset-coral);
+    box-shadow: 0 0 10px var(--sunset-coral);
+  }
+
+  .see-all {
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .see-all:hover { color: var(--sunset-coral); }
+
+  /* ===== GAME GRID ===== */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 18px;
+  }
+
+  .game-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    backdrop-filter: blur(12px);
+  }
+
+  .game-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: var(--border-hover);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(251, 113, 133, 0.08);
+  }
+
+  .game-thumb {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: var(--bg-secondary);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .game-thumb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.5) 100%);
+  }
+
+  .game-card:hover .game-thumb::before { opacity: 1; }
+
+  .thumb-placeholder {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    opacity: 0.12;
+    letter-spacing: 2px;
+  }
+
+  .thumb-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.35;
+  }
+
+  .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 2;
+  }
+
+  .game-card:hover .play-overlay { opacity: 1; }
+
+  .play-btn-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(251, 113, 133, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    box-shadow: 0 0 30px rgba(251, 113, 133, 0.4);
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .game-card:hover .play-btn-circle { transform: scale(1); }
+
+  .game-info {
+    padding: 12px 14px;
+  }
+
+  .game-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .game-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .game-tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .tag-action { background: rgba(251, 113, 133, 0.12); color: var(--sunset-coral); }
+  .tag-racing { background: rgba(253, 186, 116, 0.12); color: var(--sunset-warm); }
+  .tag-puzzle { background: rgba(125, 211, 252, 0.12); color: var(--sky-blue); }
+  .tag-sports { background: rgba(56, 189, 248, 0.12); color: var(--sky-blue-soft); }
+  .tag-shooter { background: rgba(244, 63, 94, 0.12); color: var(--sunset-rose); }
+
+  .game-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--sunset-gold);
+    font-weight: 600;
+  }
+
+  /* ===== GAME PLAYER OVERLAY (IFRAME) ===== */
+  .game-player-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(16px);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .game-player-overlay.active { display: flex; }
+
+  .player-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 12px;
+    gap: 12px;
+  }
+
+  .player-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .player-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .player-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border);
+    background: var(--bg-glass);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    backdrop-filter: blur(10px);
+  }
+
+  .player-btn:hover {
+    border-color: var(--sunset-coral);
+    color: var(--sunset-coral);
+    background: rgba(251, 113, 133, 0.08);
+  }
+
+  .player-btn.close-btn:hover {
+    border-color: var(--sunset-rose);
+    color: var(--sunset-rose);
+    background: rgba(244, 63, 94, 0.08);
+  }
+
+  .player-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
+
+  .game-frame-wrapper {
+    width: 100%;
+    max-width: 1100px;
+    height: calc(100vh - 120px);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+    backdrop-filter: blur(10px);
+  }
+
+  .game-frame-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .game-frame-wrapper:fullscreen,
+  .game-frame-wrapper:-webkit-full-screen,
+  .game-frame-wrapper:-moz-full-screen {
+    border-radius: 0;
+    max-width: 100%;
+    height: 100vh;
+  }
+
+  .loading-spinner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    z-index: 5;
+    transition: opacity 0.3s;
+  }
+
+  .loading-spinner.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(251, 113, 133, 0.15);
+    border-top-color: var(--sunset-coral);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+
+  /* ===== FOOTER ===== */
+  .portal-footer {
+    padding: 24px 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-muted);
+    font-size: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 20px;
+  }
+  .footer-links span { cursor: pointer; transition: color 0.2s; }
+  .footer-links span:hover { color: var(--sunset-coral); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .portal-header { padding: 12px 16px; }
+    .search-bar { display: none; }
+    .hero-section { margin: 12px 16px 0; padding: 20px; min-height: 200px; }
+    .hero-title { font-size: 24px; }
+    .hero-preview { display: none; }
+    .section { padding: 12px 16px 20px; }
+    .games-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .categories-bar { padding: 14px 16px; }
+    .game-player-overlay { padding: 12px; }
+    .game-frame-wrapper { height: calc(100vh - 100px); }
+    .player-title { font-size: 14px; max-width: 150px; }
+    .player-btn span { display: none; }
+    .player-btn { padding: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="rakso-portal" id="raksoPortal">
+  <!-- HEADER -->
+  <header class="portal-header">
+    <a href="#" class="logo-section" onclick="goHome(); return false;">
+      <div class="logo-icon">R</div>
+      <div class="logo-text">RAKSO</div>
+    </a>
+
+    <div class="search-bar">
+      <span class="search-icon">&#128269;</span>
+      <input type="text" placeholder="Search games..." id="searchInput" oninput="filterGames(this.value)">
+    </div>
+
+    <div class="header-actions">
+      <button class="nav-pill active" data-tab="home" onclick="switchTab('home')">Home</button>
+      <button class="nav-pill" data-tab="new" onclick="switchTab('new')">New</button>
+      <button class="nav-pill" data-tab="trending" onclick="switchTab('trending')">Trending</button>
+      <div class="user-avatar">U</div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero-section" id="heroSection">
+    <div class="hero-bg"></div>
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">&#9733; Featured</div>
+      <h2 class="hero-title">RAKSO:<br>Orbital Defense</h2>
+      <p class="hero-desc">Pilot the RAKSO fighter through hostile sectors. Blast enemies, collect power-ups, and survive the onslaught.</p>
+      <button class="hero-btn" onclick="openGame('rakso_defense')">&#9654; PLAY NOW</button>
+    </div>
+
+    <div class="hero-preview">
+      <span class="hero-preview-text">GAME PREVIEW</span>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <div class="categories-bar" id="categoriesBar">
+    <button class="cat-chip active" data-cat="all" onclick="filterCategory('all')">
+      <span class="cat-icon">&#127918;</span> All Games
+    </button>
+    <button class="cat-chip" data-cat="action" onclick="filterCategory('action')">
+      <span class="cat-icon">&#9889;</span> Action
+    </button>
+    <button class="cat-chip" data-cat="racing" onclick="filterCategory('racing')">
+      <span class="cat-icon">&#128664;</span> Racing
+    </button>
+    <button class="cat-chip" data-cat="puzzle" onclick="filterCategory('puzzle')">
+      <span class="cat-icon">&#129513;</span> Puzzle
+    </button>
+    <button class="cat-chip" data-cat="sports" onclick="filterCategory('sports')">
+      <span class="cat-icon">&#9917;</span> Sports
+    </button>
+    <button class="cat-chip" data-cat="shooter" onclick="filterCategory('shooter')">
+      <span class="cat-icon">&#127919;</span> Shooter
+    </button>
+    <button class="cat-chip" data-cat="io" onclick="filterCategory('io')">
+      <span class="cat-icon">&#127760;</span> .io
+    </button>
+    <button class="cat-chip" data-cat="2player" onclick="filterCategory('2player')">
+      <span class="cat-icon">&#128101;</span> 2 Player
+    </button>
+  </div>
+
+  <!-- TRENDING SECTION -->
+  <section class="section" id="trendingSection">
+    <div class="section-header">
+      <h3 class="section-title"><span class="dot"></span> Trending Now</h3>
+      <span class="see-all">See all &rarr;</span>
+    </div>
+    <div class="games-grid" id="trendingGrid"></div>
+  </section>
+
+  <!-- NEW GAMES SECTION -->
+  <section class="section" id="newSection">
+    <div class="section-header">
+      <h3 class="section-title"><span class="dot" style="background:var(--sunset-rose);box-shadow:0 0 10px var(--sunset-rose)"></span> New Arrivals</h3>
+      <span class="see-all">See all &rarr;</span>
+    </div>
+    <div class="games-grid" id="newGrid"></div>
+  </section>
+
+  <!-- POPULAR SECTION -->
+  <section class="section" id="popularSection">
+    <div class="section-header">
+      <h3 class="section-title"><span class="dot" style="background:var(--sky-blue);box-shadow:0 0 10px var(--sky-blue)"></span> Most Played</h3>
+      <span class="see-all">See all &rarr;</span>
+    </div>
+    <div class="games-grid" id="popularGrid"></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="portal-footer">
+    <div>&copy; 2026 RAKSO. All rights reserved.</div>
+    <div class="footer-links">
+      <span>Privacy</span>
+      <span>Terms</span>
+      <span>About</span>
+      <span>Contact</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ============================================================ -->
+<!-- GAME PLAYER OVERLAY (IFRAME) -->
+<!-- ============================================================ -->
+<div class="game-player-overlay" id="gamePlayer">
+  <div class="player-header">
+    <div class="player-title" id="playerGameTitle">GAME TITLE</div>
+    <div class="player-controls">
+      <button class="player-btn" id="fullscreenBtn" onclick="toggleFullscreen()">
+        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+        <span>Fullscreen</span>
+      </button>
+      <button class="player-btn close-btn" onclick="closeGame()">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        <span>Close</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="game-frame-wrapper" id="gameFrameWrapper">
+    <div class="loading-spinner" id="loadingSpinner">
+      <div class="spinner"></div>
+      <div class="loading-text">LOADING GAME...</div>
+    </div>
+    <iframe id="gameFrame" src="" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ============================================================
+  // GAME DATABASE — CHANGE URLS HERE!
+  // ============================================================
+  const games = [
+    { id: "rakso_defense", title: "RAKSO Defense", category: "shooter", rating: 4.8, colors: ["#fb7185", "#7dd3fc"], section: "trending", url: "https://example.com/rakso-defense" },
+    { id: "neon_drift", title: "Neon Drift", category: "racing", rating: 4.6, colors: ["#fdba74", "#f43f5e"], section: "trending", url: "https://poki.com/en/g/drift-boss" },
+    { id: "block_puzzle", title: "Block Puzzle Pro", category: "puzzle", rating: 4.5, colors: ["#7dd3fc", "#fb7185"], section: "trending", url: "https://htmlgames.com/game/Block+Puzzle" },
+    { id: "space_shooter", title: "Space Shooter X", category: "shooter", rating: 4.7, colors: ["#f43f5e", "#7dd3fc"], section: "trending", url: "https://poki.com/en/g/galaxy-attack-alien-shooter" },
+    { id: "street_ball", title: "Street Ball", category: "sports", rating: 4.4, colors: ["#38bdf8", "#7dd3fc"], section: "trending", url: "https://poki.com/en/g/street-dunk" },
+    { id: "cyber_racer", title: "Cyber Racer", category: "racing", rating: 4.3, colors: ["#fdba74", "#7dd3fc"], section: "trending", url: "https://poki.com/en/g/moto-x3m" },
+    { id: "pixel_jump", title: "Pixel Jump", category: "action", rating: 4.5, colors: ["#38bdf8", "#fdba74"], section: "new", url: "https://poki.com/en/g/geometry-dash" },
+    { id: "word_master", title: "Word Master", category: "puzzle", rating: 4.2, colors: ["#7dd3fc", "#f43f5e"], section: "new", url: "https://htmlgames.com/game/Word+Search" },
+    { id: "tank_wars", title: "Tank Wars", category: "shooter", rating: 4.6, colors: ["#f43f5e", "#fdba74"], section: "new", url: "https://poki.com/en/g/super-tank-hero" },
+    { id: "soccer_stars", title: "Soccer Stars", category: "sports", rating: 4.3, colors: ["#38bdf8", "#7dd3fc"], section: "new", url: "https://poki.com/en/g/football-legends" },
+    { id: "agar_clone", title: "Agar Clone", category: "io", rating: 4.4, colors: ["#fb7185", "#38bdf8"], section: "new", url: "https://agar.io" },
+    { id: "chess_blitz", title: "Chess Blitz", category: "puzzle", rating: 4.7, colors: ["#7dd3fc", "#fdba74"], section: "popular", url: "https://htmlgames.com/game/Chess" },
+    { id: "battle_kart", title: "Battle Kart", category: "racing", rating: 4.8, colors: ["#fdba74", "#f43f5e"], section: "popular", url: "https://poki.com/en/g/smash-karts" },
+    { id: "zombie_survival", title: "Zombie Survival", category: "shooter", rating: 4.5, colors: ["#f43f5e", "#7dd3fc"], section: "popular", url: "https://poki.com/en/g/zombie-derby-pixel-survival" },
+    { id: "basketball_pro", title: "Basketball Pro", category: "sports", rating: 4.4, colors: ["#38bdf8", "#fb7185"], section: "popular", url: "https://poki.com/en/g/basket-random" },
+    { id: "stick_fight", title: "Stick Fight", category: "action", rating: 4.6, colors: ["#fb7185", "#fdba74"], section: "popular", url: "https://poki.com/en/g/stickman-climb" },
+  ];
+
+  const tagMap = {
+    action: 'tag-action', racing: 'tag-racing', puzzle: 'tag-puzzle',
+    sports: 'tag-sports', shooter: 'tag-shooter', io: 'tag-action', '2player': 'tag-action'
+  };
+
+  function createGameCard(game) {
+    const tagClass = tagMap[game.category] || 'tag-action';
+    const initials = game.title.split(' ').map(w => w[0]).join('').substring(0, 3);
+    return `
+      <div class="game-card" onclick="openGame('${game.id}')" data-cat="${game.category}" data-title="${game.title.toLowerCase()}">
+        <div class="game-thumb" style="background: linear-gradient(135deg, ${game.colors[0]}18, ${game.colors[1]}18);">
+          <div class="thumb-pattern" style="background: radial-gradient(circle at 30% 30%, ${game.colors[0]}22, transparent 50%), radial-gradient(circle at 70% 70%, ${game.colors[1]}22, transparent 50%);"></div>
+          <span class="thumb-placeholder" style="color:${game.colors[0]}">${initials}</span>
+          <div class="play-overlay">
+            <div class="play-btn-circle">&#9654;</div>
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="game-title">${game.title}</div>
+          <div class="game-meta">
+            <span class="game-tag ${tagClass}">${game.category}</span>
+            <span class="game-rating">&#9733; ${game.rating}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSection(gridId, sectionName) {
+    const grid = document.getElementById(gridId);
+    const sectionGames = games.filter(g => g.section === sectionName);
+    grid.innerHTML = sectionGames.map(createGameCard).join('');
+  }
+
+  renderSection('trendingGrid', 'trending');
+  renderSection('newGrid', 'new');
+  renderSection('popularGrid', 'popular');
+
+  window.filterCategory = function(cat) {
+    document.querySelectorAll('.cat-chip').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
+    document.querySelectorAll('.game-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.style.display = '';
+        setTimeout(() => { card.style.opacity = '1'; card.style.transform = ''; }, 10);
+      } else {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.9)';
+        setTimeout(() => card.style.display = 'none', 250);
+      }
+    });
+  };
+
+  window.filterGames = function(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('.game-card').forEach(card => {
+      card.style.display = card.dataset.title.includes(q) ? '' : 'none';
+      card.style.opacity = card.dataset.title.includes(q) ? '1' : '0';
+    });
+  };
+
+  window.switchTab = function(tab) {
+    document.querySelectorAll('.nav-pill').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+    const sections = { home: ['trendingSection', 'newSection', 'popularSection'], new: ['newSection'], trending: ['trendingSection'] };
+    const show = sections[tab] || sections.home;
+    ['trendingSection', 'newSection', 'popularSection'].forEach(id => {
+      const el = document.getElementById(id);
+      if (show.includes(id)) { el.style.display = ''; el.classList.add('visible'); }
+      else { el.classList.remove('visible'); setTimeout(() => el.style.display = 'none', 300); }
+    });
+  };
+
+  window.goHome = function() {
+    switchTab('home');
+    document.querySelectorAll('.cat-chip').forEach(c => c.classList.toggle('active', c.dataset.cat === 'all'));
+    document.querySelectorAll('.game-card').forEach(card => { card.style.display = ''; card.style.opacity = '1'; });
+  };
+
+  window.openGame = function(gameId) {
+    const game = games.find(g => g.id === gameId);
+    if (!game) return;
+    document.getElementById('playerGameTitle').textContent = game.title;
+    const spinner = document.getElementById('loadingSpinner');
+    spinner.classList.remove('hidden');
+    const iframe = document.getElementById('gameFrame');
+    iframe.src = game.url;
+    iframe.onload = () => spinner.classList.add('hidden');
+    setTimeout(() => spinner.classList.add('hidden'), 5000);
+    document.getElementById('gamePlayer').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeGame = function() {
+    document.getElementById('gamePlayer').classList.remove('active');
+    document.body.style.overflow = '';
+    const iframe = document.getElementById('gameFrame');
+    iframe.src = '';
+    iframe.onload = null;
+    document.getElementById('loadingSpinner').classList.remove('hidden');
+  };
+
+  window.toggleFullscreen = function() {
+    const wrapper = document.getElementById('gameFrameWrapper');
+    if (!document.fullscreenElement) wrapper.requestFullscreen().catch(()=>{});
+    else document.exitFullscreen();
+  };
+
+  document.addEventListener('fullscreenchange', function() {
+    const btn = document.getElementById('fullscreenBtn');
+    const isFs = !!document.fullscreenElement;
+    btn.innerHTML = isFs
+      ? '<svg viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg><span>Exit Fullscreen</span>'
+      : '<svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg><span>Fullscreen</span>';
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGame(); });
+
+  let heroFrame = 0;
+  function animateHero() {
+    heroFrame++;
+    const g1 = document.querySelector('.hero-glow-1');
+    const g2 = document.querySelector('.hero-glow-2');
+    if (g1) g1.style.transform = `translate(${Math.sin(heroFrame*0.008)*25}px, ${Math.cos(heroFrame*0.011)*18}px)`;
+    if (g2) g2.style.transform = `translate(${Math.cos(heroFrame*0.01)*20}px, ${Math.sin(heroFrame*0.007)*22}px)`;
+    requestAnimationFrame(animateHero);
+  }
+  animateHero();
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.section').forEach(s => { observer.observe(s); s.classList.add('visible'); });
+})();
+</script>
+
+</body>
+</html>
